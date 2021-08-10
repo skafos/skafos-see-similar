@@ -12,9 +12,6 @@ Implement the following changes to your collection pages for the see similar fea
 
   <img class="skafosIconFull" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/skafos-logo-color-8x8.svg?v=1628099441">
 
-
-
-
   <div class="skafosIconCompleted">
     <img src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/small-tick-8x8.svg?v=1628099441">
   </div>
