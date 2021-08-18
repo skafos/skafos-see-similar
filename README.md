@@ -1,43 +1,44 @@
 # skafos-see-similar
-Reference Implementation of See-Similar on Shopify
+Reference Implementation for See-Similar on Shopify
 
-Implement the following changes to your collection pages for the see similar feature to work:
-1. Add a class `skafosSimilarProductTemplate` to the product item template withing the collection products list.
+Implement the following changes to your collection pages for the see-similar feature to work:
+1. Add a class `skafosSimilarProductTemplate` to the product item template within the collection products list.
 
 2. Add following code within the template's starting div:
 ```
 <div onclick="skafosSeeSimilar(this)" data-skafos-product-id="{{product.id}}" data-skafos-collection-id="{{collection.id}}" class="seeSimilarContainer">
               
-  <img class="skafosIconOutline" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/skafos-logo-black-8x8.svg?v=1628099441">
+	<img class="skafosIconOutline" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Skafos-logo-small-bw-12x12.svg?v=1628762198">
 
-  <img class="skafosIconFull" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/skafos-logo-color-8x8.svg?v=1628099441">
+	<img class="skafosIconFull" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Skafos-logo-small-color-12x12.svg?v=1628762198">
 
-  <div class="skafosIconCompleted">
-    <img src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/small-tick-8x8.svg?v=1628099441">
-  </div>
+	<div class="skafosIconCompleted">
+		<img src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/checkmark.svg?v=1628762198">
+	</div>
 
-  <div class="animationText">
-    <span>&nbsp;&nbsp;</span>
-    <span data-seesimilartextinit>See Similar</span>
-    <span data-seesimilartextstarted>Finding Items...</span>
-  </div>
+	<div class="animationText">
+		<span>&nbsp;&nbsp;</span>
+		<span data-seesimilartextinit>See Similar</span>
+		<span data-seesimilartextstarted>Finding Items...</span>
+		<span>&nbsp;&nbsp;</span>
+	</div>
 </div>
 
 ```
 
-3. Add the following data attributes to all the elements within the template which are dynamic like title, images etc:
+3. Add the following data attributes to all the elements within the template which are dynamic, like title, images etc:
   - `data-skafos-similar-title` : Title
   - `data-skafos-similar-image` : Image 
   - `data-skafos-similar-price` : Price
  
-4. Add following css to either your collection template or your theme's global css file: 
+4. Add following css to either your collection's template or your theme's global css file: 
 ```
  <style>
       .skafosSimilarProductTemplate{
         position:relative;
       }
       .seeSimilarContainer{
-        box-shadow: 1px 1px 4px rgb(0 0 0 / 14%), -1px -1px 4px rgb(0 0 0 / 14%);
+        box-shadow: 1px 1px 4px 0px rgba(15, 15, 15, 0.15), -1px -1px 4px 0px rgba(15, 15, 15, 0.15);
         border-radius: 25px;
         padding: 5px;
         min-height: 35px;
@@ -53,6 +54,19 @@ Implement the following changes to your collection pages for the see similar fea
         vertical-align: middle;
         align-items: center;
         
+      }
+      .seeSimilarContainer:hover{
+      	box-shadow: 3px 3px 12px 0px rgba(15, 15, 15, 0.25), -3px -3px 12px 0px rgba(15, 15, 15, 0.25);
+		}
+        .seeSimilarContainer[data-see-similar-started]{
+        	box-shadow: 1px 1px 4px 0px rgba(15, 15, 15, 0.15), -1px -1px 4px 0px rgba(15, 15, 15, 0.15);
+        }
+      .seeSimilarContainer[data-see-similar-completed]{
+      		background-color:#50CB93;
+        	box-shadow: 3px 3px 12px 0px rgba(80, 203, 147, 0.15), -3px -3px 12px 0px rgba(80, 203, 147, 0.25);
+      }
+      .seeSimilarContainer[data-see-similar-completed-final]{
+        	box-shadow: 1px 1px 4px 0px rgba(15, 15, 15, 0.15), -1px -1px 4px 0px rgba(15, 15, 15, 0.15);
       }
       .seeSimilarContainer .skafosIconOutline{
         display:inline;
@@ -70,9 +84,14 @@ Implement the following changes to your collection pages for the see similar fea
         display:inline;
         max-width:0px;
         opacity:0;
-        font-size: 10px;
+        font-size: 12px;
+    	color: #202223;
         transition: max-width .5s ease-in-out,width .5s ease-in-out,opacity .5s ease-in-out
       }
+      .seeSimilarContainer[data-see-similar-completed] .animationText{
+      	color:white;
+        transition: max-width 3s ease-in-out,width 3s ease-in-out,opacity 3s ease-in-out
+		}
       
       .seeSimilarContainer [data-seesimilartextinit]{
         display:inline;
@@ -101,13 +120,10 @@ Implement the following changes to your collection pages for the see similar fea
       
       .skafosIconCompleted{
         display:none;
-        background: rgba(255, 255, 255, 0.75);
-        border: 2px solid #43AD5A;
         box-sizing: border-box;
-        box-shadow: 1px 1px 4px rgba(15, 15, 15, 0.15), -1px -1px 4px rgba(15, 15, 15, 0.15);
         border-radius: 10px;
-        width:20px;
-        height:20px;
+        width: 20px;
+        height: 20px;
       }
       .skafosIconCompleted img{
         width:20px;
@@ -124,7 +140,9 @@ Implement the following changes to your collection pages for the see similar fea
       }
       
       .seeSimilarContainer[data-see-similar-completed] .skafosIconCompleted{
-        display:inline;
+        display: inline-flex;
+    	align-items: center;
+        margin:auto;
       }
       
       
@@ -132,15 +150,11 @@ Implement the following changes to your collection pages for the see similar fea
         opacity:0;
         max-width:0px;
       }
-      .seeSimilarContainer[data-see-similar-completed]{
-        box-shadow: none;
-		    border-radius: 0px;	
-      }
  </style>
 ```
 
-5. Add `<script>window.skafosShopId={{shop.id}}</script>` before the closing `</body>` tag of theme.liquid file
-6. Add Below code to either your theme's global script file or create a new script file and add that to the theme.liquid file:
+5. Add `<script>window.skafosShopId={{shop.id}}</script>` before the closing `</body>` tag of `theme.liquid` file
+6. Add Below code to either your theme's global script file or create a new script file and add that to the `theme.liquid` file:
 ```
 var scafosTemplate = document.querySelector('.skafosSimilarProductTemplate').cloneNode(true);
 
@@ -199,11 +213,14 @@ async function skafosSeeSimilar(e){
   
   e.querySelector('[data-seesimilartextstarted]').innerHTML='Items Found!';
   e.dataset.seeSimilarCompleted=true;
+  setTimeout(function (){
+   e.dataset.seeSimilarCompletedFinal=true;
+  },3000)
 
 }
 ```
 
-The above code will fetch the data from our api and show the similar products on your collections page. If you have complex requirements on the product item on the collection grid, like if you want to show variant swatches etc, then you need to alter the `skafosSeeSimilar` function above to modify the product template before it gets added to the `similarProducts` array. The `item` object in the above for loop will have the following info for you to work with: 
+The above code will fetch the data from our api and show the similar products on your collection's page. If you have complex requirements on the product item on the collection grid, like if you want to show variant swatches etc, then you need to alter the `skafosSeeSimilar` function above to modify the product template before it gets added to the `similarProducts` array. The `item` object in the above `for` loop will have the following info for you to work with: 
 ```
 {
 description: "PRODUCT'S_DESCRIPTION"
@@ -219,4 +236,4 @@ solution_version: "SKAFOS_SOLUTION_VERSION"
 tags: (7) [ARRAY_OF_PRODUCT_TAGS]
 }
 ```
-You can use the above object to modify the contents of the template before it gets added to the `similarProducts` array. 
+You can use the above object to modify the contents of the template before it gets added to the `similarProducts` array, which is used to add similar products to the collection's products grid. 
