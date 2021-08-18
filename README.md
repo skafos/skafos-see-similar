@@ -156,7 +156,7 @@ Implement the following changes to your collection pages for the see-similar fea
 5. Add `<script>window.skafosShopId={{shop.id}}</script>` before the closing `</body>` tag of `theme.liquid` file
 6. Add Below code to either your theme's global script file or create a new script file and add that to the `theme.liquid` file:
 ```
-var scafosTemplate = document.querySelector('.skafosSimilarProductTemplate').cloneNode(true);
+var skafosTemplate = document.querySelector('.skafosSimilarProductTemplate').cloneNode(true);
 
 
 async function skafosSeeSimilar(e){
@@ -183,7 +183,7 @@ async function skafosSeeSimilar(e){
   
   for(var i=0;i<content.result.similarProducts.length;i++){
     var item=content.result.similarProducts[i];
-    var similarProduct = scafosTemplate.cloneNode(true);
+    var similarProduct = skafosTemplate.cloneNode(true);
     similarProduct.querySelector("[data-skafos-product-id]").dataset.skafosProductId=item.id.split('/').pop();
     var links = similarProduct.querySelectorAll("[data-skafos-similar-link]");
     links.forEach((link) => {
