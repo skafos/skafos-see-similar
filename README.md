@@ -1,8 +1,10 @@
 # skafos-see-similar
 Reference Implementation for See-Similar on Shopify
 
-Go to Themes > Your Theme > Actions > Edit Code and implement the following changes to your collection pages for the see-similar feature to work:
-1. Find the liquid file that populates products in your collections and add a class `skafosSimilarProductTemplate` to the product item template within the collection products list.
+Go to Online Store -> Themes -> the theme you want to edit -> Actions -> Edit Code and implement the following changes to your collection pages for the see-similar feature to work:
+1. Find the liquid file that populates products in your collections and add a class `skafosSimilarProductTemplate` to the product item template within the collection products list. This code could look something like this:
+![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_1.png?v=1629717539)
+
 
 2. Add following code within the template's starting div:
 ```
