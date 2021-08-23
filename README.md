@@ -6,37 +6,40 @@ Go to Online Store -> Themes -> the theme you want to edit -> Actions -> Edit Co
 ![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_1.png?v=1629717539)
 
 
-2. Add following code as a direct child of the skafosSimilarProductTemplate element:
+2. Add following code as a direct child of the `skafosSimilarProductTemplate` element:
 ```
 <div onclick="skafosSeeSimilar(this)" data-skafos-product-id="{{product.id}}" data-skafos-collection-id="{{collection.id}}" class="seeSimilarContainer">
-              
-	<img class="skafosIconOutline" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Skafos-logo-small-bw-12x12.svg?v=1628762198">
+  <img class="skafosIconOutline" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Skafos-logo-small-bw-12x12.svg?v=1628762198">
 
-	<img class="skafosIconFull" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Skafos-logo-small-color-12x12.svg?v=1628762198">
+  <img class="skafosIconFull" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Skafos-logo-small-color-12x12.svg?v=1628762198">
 
-	<div class="skafosIconCompleted">
-		<img src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/checkmark.svg?v=1628762198">
-	</div>
+  <div class="skafosIconCompleted">
+      <img src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/checkmark.svg?v=1628762198">
+  </div>
 
-	<div class="animationText">
-		<span>&nbsp;&nbsp;</span>
-		<span data-seesimilartextinit>See Similar</span>
-		<span data-seesimilartextstarted>Finding Items...</span>
-		<span>&nbsp;&nbsp;</span>
-	</div>
+  <div class="animationText">
+      <span>&nbsp;&nbsp;</span>
+      <span data-seesimilartextinit>See Similar</span>
+      <span data-seesimilartextstarted>Finding Items...</span>
+  </div>
 </div>
 
 ```
 This code could look something like this:
-![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_2.png?v=1629717620)
+![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_2_9d7edac1-7374-4e06-a437-97907ab84cb8.png?v=1629717886)
 
 
-3. Add the following data attributes to all the elements within the template which are dynamic, like title, images etc:
+3. Add the following data attributes to all the dynamic HTML elements within the skafosSimilarProductTemplate that renders title, images, and price:
   - `data-skafos-similar-title` : Title
   - `data-skafos-similar-image` : Image 
   - `data-skafos-similar-price` : Price
+The code could look something like these:
+![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_3.png?v=1629717969)
+![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_3.1.png?v=1629718096)
+![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_3.2.png?v=1629718096)
+
  
-4. Add following css to either your collection's template or your theme's global css file: 
+4. Add following css after the opening `<body>` tag of the theme.liquid file: 
 ```
  <style>
       .skafosSimilarProductTemplate{
@@ -46,6 +49,7 @@ This code could look something like this:
         box-shadow: 1px 1px 4px 0px rgba(15, 15, 15, 0.15), -1px -1px 4px 0px rgba(15, 15, 15, 0.15);
         border-radius: 25px;
         padding: 5px;
+        background:white;
         min-height: 35px;
         min-width: 35px;
         cursor: pointer;
@@ -120,7 +124,7 @@ This code could look something like this:
       }
       .seeSimilarContainer:hover .animationText, .seeSimilarContainer[data-see-similar-started] .animationText{
         opacity:1;
-        max-width:7.5rem;
+        max-width:10.5rem;
       }
       
       .skafosIconCompleted{
@@ -158,9 +162,11 @@ This code could look something like this:
  </style>
 ```
 
-5. Add `<script>window.skafosShopId={{shop.id}}</script>` before the closing `</body>` tag of `theme.liquid` file
-6. Add Below code to either your theme's global script file or create a new script file and add that to the `theme.liquid` file:
+5. Add the following code before the closing `</body>` tag in the theme.liquid file:
 ```
+<script>
+window.skafosShopId={{shop.id}}
+
 var skafosTemplate = document.querySelector('.skafosSimilarProductTemplate').cloneNode(true);
 
 
@@ -223,6 +229,7 @@ async function skafosSeeSimilar(e){
   },3000)
 
 }
+</script>
 ```
 
 The above code will fetch the data from our api and show the similar products on your collection's page. If you have complex requirements on the product item on the collection grid, like if you want to show variant swatches etc, then you need to alter the `skafosSeeSimilar` function above to modify the product template before it gets added to the `similarProducts` array. The `item` object in the above `for` loop will have the following info for you to work with: 
