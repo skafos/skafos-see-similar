@@ -6,7 +6,7 @@ Go to Online Store -> Themes -> the theme you want to edit -> Actions -> Edit Co
 ![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_1.png?v=1629717539)
 
 
-2. Add following code within the template's starting div:
+2. Add following code as a direct child of the skafosSimilarProductTemplate element:
 ```
 <div onclick="skafosSeeSimilar(this)" data-skafos-product-id="{{product.id}}" data-skafos-collection-id="{{collection.id}}" class="seeSimilarContainer">
               
@@ -27,6 +27,9 @@ Go to Online Store -> Themes -> the theme you want to edit -> Actions -> Edit Co
 </div>
 
 ```
+This code could look something like this:
+![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_2.png?v=1629717620)
+
 
 3. Add the following data attributes to all the elements within the template which are dynamic, like title, images etc:
   - `data-skafos-similar-title` : Title
