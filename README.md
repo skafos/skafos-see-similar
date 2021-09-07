@@ -41,7 +41,7 @@ The code could look something like the following examples. Note: There might be 
 ## Adding the Code 
 Add the following code before the closing `</body>` tag in the theme.liquid file:
 ```html
-<script>
+<script type="module">
     window.skafosShopId={{shop.id}}
     import { skafosSeeSimilar } from 'http://hosted.skafos.ai/assets/scripts/skafos-see-similar.js'
 
