@@ -93,7 +93,7 @@ Here is an example function and how to use it:
         const similarProducts = []
 
         for (const product of newProducts) {
-            const similarProduct = skafosTemplate.cloneNode(true)
+            const similarProduct = productDiv.cloneNode(true)
             similarProduct.setAttribute('data-skafos-product-id', product.id.split('/').pop())
 
             // update links

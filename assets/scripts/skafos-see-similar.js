@@ -153,6 +153,11 @@ const addSeeSimilarToProduct = (productDiv, customCloner, options) => {
     const clickListener = async () => {
         seeSimilarDiv.removeEventListener('click', clickListener)
         seeSimilarDiv.dataset.seeSimilarStarted="true";
+
+        recordAnalyticsEvent('click', {
+            productId,
+            collectionId
+        })
         
         const similarProducts = await getSimilarProducts(productId, collectionId, options.count)
         const newDivs = await customCloner(productDiv, similarProducts)
