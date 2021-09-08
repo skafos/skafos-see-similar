@@ -5,7 +5,7 @@
 Go to Online Store -> Themes -> the theme you want to edit -> Actions -> Edit Code and implement the following changes to your liquid files:
 ### Collections Page
 
-Find the liquid file that populates products in your collections and the following items to the to the product item template within the collection products list. 
+Find the liquid file that populates products in your collections and the following items to the product item template within the collection products list. 
 
 1. A Custom class - `skafosSimilarProductTemplate`
 2. The Product id
