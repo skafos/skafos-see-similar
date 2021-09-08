@@ -57,7 +57,7 @@ The `skafosSeeSimilar` function takes three parameters.
 3. The third one is an object to pass custom options
 
 ### Custom Product Card Cloning
-If you have a theme with a complex product card structure that our default code cannot handle, you can pass in a function that to the second parameter of `skafosSeeSimilar`. That function has two parameters. The product HTML element that is being cloned and a list of similar items. It is expected to return a list of product HTML elements that will be inserted after the one where see similar was clicked.
+If you have a theme with a complex product card structure that our default code cannot handle, you can pass in a function that to the second parameter of `skafosSeeSimilar`. That function has two parameters. The product HTML element that see similar was clicked on and a list of similar items. The function is expected to return a list of product HTML elements that will be inserted after the one where see similar was clicked. This is done by cloning the product HTML element and replacing all the relevant details with those of the similar product.
 
 Here is the data available for similar products to your cloning function:
 ```js
