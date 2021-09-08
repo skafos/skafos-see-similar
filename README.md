@@ -145,8 +145,19 @@ You can use this property to replace the text that is shown on the See Similar w
 
 **count**
 
-This is the number of similar items that are inserted.
+This is the number of similar items that are inserted. The default is 5.
 
 **stylesheet**
 
 [Here is our default stylesheet](assets/styles/skafos-see-similar.css). You can use this to create your own stylesheet and then provide the url to that stylesheet to use instead of ours.
+
+Here is an example of using some options:
+```js
+skafosSeeSimilar('skafosSimilarProductTemplate', productClone, {
+    text: {
+        seeSimilar: 'More Like This'
+    },
+    count: 3,
+    stylesheet: 'https://url.to/mystyles.css'
+ })
+```
