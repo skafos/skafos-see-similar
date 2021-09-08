@@ -14,7 +14,7 @@ Find the liquid file that populates products in your collections and the followi
 This code could look something like this:
 ```
           {%- for product in collection.products -%}
-            <li class="grid__item skafosSimilarProductTemplate" data-skafos-product-id="{{product.id}}data-skafos-collection-id="{{collection.id}}">
+            <li class="grid__item skafosSimilarProductTemplate" data-skafos-product-id="{{product.id}}" data-skafos-collection-id="{{collection.id}}">
               {% render 'product-card',
                 product_card_product: product,
                 media_size: section.settings.image_ratio,
