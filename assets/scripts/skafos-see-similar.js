@@ -1,5 +1,3 @@
-const skafosTemplate = document.querySelector('.skafosSimilarProductTemplate').cloneNode(true)
-
 const addCss = (url) => {
     const link = document.createElement('link')
     link.type = 'text/css'
@@ -29,11 +27,47 @@ const getSimilarProducts = async (productId, collectionId, count = 5) => {
     return content.result.similarProducts
 }
 
+const recordAnalyticsEvent = (event, data) => {
+    // GTM
+    window.dataLayer = window.dataLayer || []
+    window.dataLayer.push({
+        event: `skafos-see-similar-${event}`,
+        ...data
+    })
+
+    const sessionId = localStorage.getItem("skafosSession")
+    if (!sessionId) {
+        sessionId = Date.now().toString(16)
+        while (sessionId.length < 64) {
+            sessionId = `${sessionId}${Math.random().toString(16).substring(2)}`
+        }
+        sessionId = sessionId.substring(0,64)
+        localStorage.setItem("skafosSession", sessionId)        
+    }
+
+    // Skafos Analytics
+    const eventData = {
+        event_name: event,
+        event: {
+            session_id: sessionId,
+            metadata: {
+                product_id: data.productId
+            },
+            tracking: {
+                shop_id: window.skafosShopId,
+                collection_id: data.collectionId,
+                page_url: location.href,
+                widget: "see-similar"
+            }
+        }
+    }
+}
+
 const productClone = (productDiv, newProducts) => {
     const similarProducts = []
 
     for (const product of newProducts) {
-        const similarProduct = skafosTemplate.cloneNode(true)
+        const similarProduct = productDiv.cloneNode(true)
         similarProduct.setAttribute('data-skafos-product-id', product.id.split('/').pop())
 
         // update links
@@ -113,14 +147,17 @@ const addSeeSimilarToProduct = (productDiv, customCloner, options) => {
 
     seeSimilarDiv.appendChild(skafosAnimationText)
 
+    const productId = productDiv.getAttribute('data-skafos-product-id')
+    const collectionId = productDiv.getAttribute('data-skafos-collection-id')
+
     const clickListener = async () => {
         seeSimilarDiv.removeEventListener('click', clickListener)
         seeSimilarDiv.dataset.seeSimilarStarted="true";
-        const productId = productDiv.getAttribute('data-skafos-product-id')
-        const collectionId = productDiv.getAttribute('data-skafos-collection-id')
+        
         const similarProducts = await getSimilarProducts(productId, collectionId, options.count)
         const newDivs = await customCloner(productDiv, similarProducts)
         for (const newDiv of newDivs) {
+            newDiv.getElementsByClassName('seeSimilarContainer')[0].remove()
             addSeeSimilarToProduct(newDiv, customCloner, options)
             productDiv.parentNode.insertBefore(newDiv, productDiv.nextSibling)
         }
@@ -132,7 +169,10 @@ const addSeeSimilarToProduct = (productDiv, customCloner, options) => {
     }
 
     const hoverListener = () => {
-        
+        recordAnalyticsEvent('hover', {
+            productId,
+            collectionId
+        })
     }
 
     seeSimilarDiv.addEventListener('click', clickListener)
