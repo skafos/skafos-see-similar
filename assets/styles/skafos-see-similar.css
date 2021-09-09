@@ -1,0 +1,134 @@
+.skafosSimilarProductTemplate {
+    position: relative;
+}
+
+.seeSimilarContainer {
+    box-shadow    : 1px 1px 4px 0px rgba(15, 15, 15, 0.15), -1px -1px 4px 0px rgba(15, 15, 15, 0.15);
+    border-radius : 25px;
+    padding       : 5px;
+    background    : white;
+    min-height    : 35px;
+    min-width     : 35px;
+    cursor        : pointer;
+    overflow      : hidden;
+    transition    : box-shadow 2s ease-in-out, border-radius 2s ease-in-out;
+    position      : absolute;
+    top           : 10px;
+    right         : 10px;
+    z-index       : 100;
+    display       : inline-flex;
+    vertical-align: middle;
+    align-items   : center;
+
+}
+
+.seeSimilarContainer:hover {
+    box-shadow: 3px 3px 12px 0px rgba(15, 15, 15, 0.25), -3px -3px 12px 0px rgba(15, 15, 15, 0.25);
+}
+
+.seeSimilarContainer[data-see-similar-started] {
+    box-shadow: 1px 1px 4px 0px rgba(15, 15, 15, 0.15), -1px -1px 4px 0px rgba(15, 15, 15, 0.15);
+}
+
+.seeSimilarContainer[data-see-similar-completed] {
+    background-color: #50CB93;
+    box-shadow      : 3px 3px 12px 0px rgba(80, 203, 147, 0.15), -3px -3px 12px 0px rgba(80, 203, 147, 0.25);
+}
+
+.seeSimilarContainer[data-see-similar-completed-final] {
+    box-shadow: 1px 1px 4px 0px rgba(15, 15, 15, 0.15), -1px -1px 4px 0px rgba(15, 15, 15, 0.15);
+}
+
+.seeSimilarContainer .skafosIconOutline {
+    display     : inline;
+    width       : 20px;
+    height      : 20px;
+    padding-left: 2px;
+}
+
+.seeSimilarContainer .skafosIconFull {
+    display: none;
+    width  : 20px;
+    height : 20px;
+}
+
+.seeSimilarContainer .skafosAnimationText {
+    white-space: nowrap;
+    display    : inline;
+    max-width  : 0px;
+    opacity    : 0;
+    font-size  : 12px;
+    color      : #202223;
+    transition : max-width .5s ease-in-out, width .5s ease-in-out, opacity .5s ease-in-out
+}
+
+.seeSimilarContainer[data-see-similar-completed] .skafosAnimationText {
+    color     : white;
+    transition: max-width 3s ease-in-out, width 3s ease-in-out, opacity 3s ease-in-out
+}
+
+.seeSimilarContainer [data-seesimilartextinit] {
+    display: inline;
+}
+
+.seeSimilarContainer [data-seesimilartextstarted] {
+    display: none;
+}
+
+.seeSimilarContainer[data-see-similar-started] [data-seesimilartextinit] {
+    display: none;
+}
+
+.seeSimilarContainer[data-see-similar-started] [data-seesimilartextstarted] {
+    display: inline;
+}
+
+.seeSimilarContainer:hover .skafosIconOutline,
+.seeSimilarContainer[data-see-similar-started] .skafosIconOutline {
+    display: none;
+}
+
+.seeSimilarContainer:hover .skafosIconFull,
+.seeSimilarContainer[data-see-similar-started] .skafosIconFull {
+    display: inline;
+}
+
+.seeSimilarContainer:hover .skafosAnimationText,
+.seeSimilarContainer[data-see-similar-started] .skafosAnimationText {
+    opacity  : 1;
+    max-width: 10.5rem;
+}
+
+.skafosIconCompleted {
+    display      : none;
+    box-sizing   : border-box;
+    border-radius: 10px;
+    width        : 20px;
+    height       : 20px;
+}
+
+.skafosIconCompleted img {
+    width : 20px;
+    height: 16px;
+}
+
+
+.seeSimilarContainer[data-see-similar-completed] [data-seesimilartextinit],
+.seeSimilarContainer[data-see-similar-completed] .skafosIconOutline,
+.seeSimilarContainer[data-see-similar-completed] .skafosIconFull {
+    display    : none;
+    font-size  : 10px;
+    line-height: 12px;
+}
+
+.seeSimilarContainer[data-see-similar-completed] .skafosIconCompleted {
+    display    : inline-flex;
+    align-items: center;
+    margin     : auto;
+}
+
+
+.seeSimilarContainer[data-see-similar-completed] .skafosAnimationText {
+    opacity  : 0;
+    max-width: 0px;
+}

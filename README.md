@@ -1,250 +1,163 @@
 # Reference Implementation for See-Similar on Shopify
 
-Go to Online Store -> Themes -> the theme you want to edit -> Actions -> Edit Code and implement the following changes to your collection pages for the see-similar feature to work:
-1. Find the liquid file that populates products in your collections and add a class `skafosSimilarProductTemplate` to the product item template within the collection products list. This code could look something like this:
-![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_1.png?v=1629717539)
+## Adding Integration Points To Your Theme
 
+Go to Online Store -> Themes -> the theme you want to edit -> Actions -> Edit Code and implement the following changes to your liquid files:
+### Collections Page
 
-2. Add following code as a direct child of the `skafosSimilarProductTemplate` element:
-```
-<div onclick="skafosSeeSimilar(this)" data-skafos-product-id="{{product.id}}" data-skafos-collection-id="{{collection.id}}" class="seeSimilarContainer">
-  <img class="skafosIconOutline" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Skafos-logo-small-bw-12x12.svg?v=1628762198">
+Find the liquid file that populates products in your collections and add the following items to the product item template within the collection products list. 
 
-  <img class="skafosIconFull" src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Skafos-logo-small-color-12x12.svg?v=1628762198">
+1. A Custom class - `skafosSimilarProductTemplate`
+2. The Product id
+3. The Collection id
 
-  <div class="skafosIconCompleted">
-      <img src="https://cdn.shopify.com/s/files/1/0514/3766/6459/files/checkmark.svg?v=1628762198">
-  </div>
-
-  <div class="animationText">
-      <span>&nbsp;&nbsp;</span>
-      <span data-seesimilartextinit>See Similar</span>
-      <span data-seesimilartextstarted>Finding Items...</span>
-  </div>
-</div>
-
-```
 This code could look something like this:
-![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_2_9d7edac1-7374-4e06-a437-97907ab84cb8.png?v=1629717886)
+```
+          {%- for product in collection.products -%}
+            <li class="grid__item skafosSimilarProductTemplate" data-skafos-product-id="{{product.id}}" data-skafos-collection-id="{{collection.id}}">
+              {% render 'product-card',
+                product_card_product: product,
+                media_size: section.settings.image_ratio,
+                show_secondary_image: section.settings.show_secondary_image,
+                add_image_padding: section.settings.add_image_padding,
+                show_vendor: section.settings.show_vendor
+              %}
+            </li>
+          {%- endfor -%}
+```
 
+### Product Card
 
-3. Add the following data attributes to all the dynamic HTML elements within the skafosSimilarProductTemplate that renders title, images, and price:
+Add the following data attributes to all the dynamic HTML elements within the skafosSimilarProductTemplate that render title, images, and price:
   - `data-skafos-similar-title` : Title
   - `data-skafos-similar-image` : Image 
   - `data-skafos-similar-price` : Price
-The code could look something like these:
+The code could look something like the following examples. Note: There might be multiple locations where you need to insert those attributes and they might be spread across multiple liquid files
 ![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_3.png?v=1629717969)
 ![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_3.1.png?v=1629718096)
 ![](https://cdn.shopify.com/s/files/1/0514/3766/6459/files/Step_3.2.png?v=1629718096)
 
- 
-4. Add following css after the opening `<body>` tag of the theme.liquid file: 
-```
- <style>
-      .skafosSimilarProductTemplate{
-        position:relative;
-      }
-      .seeSimilarContainer{
-        box-shadow: 1px 1px 4px 0px rgba(15, 15, 15, 0.15), -1px -1px 4px 0px rgba(15, 15, 15, 0.15);
-        border-radius: 25px;
-        padding: 5px;
-        background:white;
-        min-height: 35px;
-        min-width: 35px;
-        cursor: pointer;
-        overflow: hidden;
-        transition: box-shadow 2s ease-in-out,border-radius 2s ease-in-out;
-        position:absolute;
-        top:10px;
-        right:10px;
-        z-index:100;
-        display: inline-flex;
-        vertical-align: middle;
-        align-items: center;
-        
-      }
-      .seeSimilarContainer:hover{
-      	box-shadow: 3px 3px 12px 0px rgba(15, 15, 15, 0.25), -3px -3px 12px 0px rgba(15, 15, 15, 0.25);
-		}
-        .seeSimilarContainer[data-see-similar-started]{
-        	box-shadow: 1px 1px 4px 0px rgba(15, 15, 15, 0.15), -1px -1px 4px 0px rgba(15, 15, 15, 0.15);
-        }
-      .seeSimilarContainer[data-see-similar-completed]{
-      		background-color:#50CB93;
-        	box-shadow: 3px 3px 12px 0px rgba(80, 203, 147, 0.15), -3px -3px 12px 0px rgba(80, 203, 147, 0.25);
-      }
-      .seeSimilarContainer[data-see-similar-completed-final]{
-        	box-shadow: 1px 1px 4px 0px rgba(15, 15, 15, 0.15), -1px -1px 4px 0px rgba(15, 15, 15, 0.15);
-      }
-      .seeSimilarContainer .skafosIconOutline{
-        display:inline;
-        width:20px;
-        height:20px;
-        padding-left: 2px;
-      }
-      .seeSimilarContainer .skafosIconFull{
-        display:none;
-        width:20px;
-        height:20px;
-      }
-      .seeSimilarContainer .animationText{
-        white-space: nowrap;
-        display:inline;
-        max-width:0px;
-        opacity:0;
-        font-size: 12px;
-    	color: #202223;
-        transition: max-width .5s ease-in-out,width .5s ease-in-out,opacity .5s ease-in-out
-      }
-      .seeSimilarContainer[data-see-similar-completed] .animationText{
-      	color:white;
-        transition: max-width 3s ease-in-out,width 3s ease-in-out,opacity 3s ease-in-out
-		}
-      
-      .seeSimilarContainer [data-seesimilartextinit]{
-        display:inline;
-      }
-      .seeSimilarContainer [data-seesimilartextstarted]{
-        display:none;
-      }
-      
-      .seeSimilarContainer[data-see-similar-started] [data-seesimilartextinit]{
-        display:none;
-      }
-      .seeSimilarContainer[data-see-similar-started] [data-seesimilartextstarted]{
-        display:inline;
-      }
-      
-      .seeSimilarContainer:hover .skafosIconOutline, .seeSimilarContainer[data-see-similar-started] .skafosIconOutline{
-        display:none;
-      }
-      .seeSimilarContainer:hover .skafosIconFull, .seeSimilarContainer[data-see-similar-started] .skafosIconFull{
-        display:inline;
-      }
-      .seeSimilarContainer:hover .animationText, .seeSimilarContainer[data-see-similar-started] .animationText{
-        opacity:1;
-        max-width:10.5rem;
-      }
-      
-      .skafosIconCompleted{
-        display:none;
-        box-sizing: border-box;
-        border-radius: 10px;
-        width: 20px;
-        height: 20px;
-      }
-      .skafosIconCompleted img{
-        width:20px;
-        height:16px;
-      }
-      
-      
-      .seeSimilarContainer[data-see-similar-completed] [data-seesimilartextinit],
-      .seeSimilarContainer[data-see-similar-completed] .skafosIconOutline,
-      .seeSimilarContainer[data-see-similar-completed] .skafosIconFull{
-        display:none;
-        font-size: 10px;
-        line-height: 12px;
-      }
-      
-      .seeSimilarContainer[data-see-similar-completed] .skafosIconCompleted{
-        display: inline-flex;
-    	align-items: center;
-        margin:auto;
-      }
-      
-      
-      .seeSimilarContainer[data-see-similar-completed] .animationText{
-        opacity:0;
-        max-width:0px;
-      }
- </style>
-```
 
-5. Add the following code before the closing `</body>` tag in the theme.liquid file:
-```
-<script>
-window.skafosShopId={{shop.id}}
+## Adding the Code 
+Add the following code before the closing `</body>` tag in the theme.liquid file:
+```html
+<script type="module">
+    window.skafosShopId={{shop.id}}
+    import { skafosSeeSimilar } from 'http://hosted.skafos.ai/assets/scripts/skafos-see-similar.js'
 
-var skafosTemplate = document.querySelector('.skafosSimilarProductTemplate').cloneNode(true);
-
-
-async function skafosSeeSimilar(e){
-  if(e.dataset.seeSimilarCompleted) return;
-  e.dataset.seeSimilarStarted="true";
-  const data={
-     "productID":"gid://shopify/Product/"+e.dataset.skafosProductId,
-     "collectionID":"gid://shopify/Collection/"+e.dataset.skafosCollectionId,
-     "count":5,
-     "shopID": "gid://shopify/Shop/"+window.skafosShopId
-     }
-  const rawResponse = await fetch('https://api.skafos.ai/v1/products/similar', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-  
-  const content = await rawResponse.json();
-  var html=``;
-  
-  var similarProducts = [];
-  
-  for(var i=0;i<content.result.similarProducts.length;i++){
-    var item=content.result.similarProducts[i];
-    var similarProduct = skafosTemplate.cloneNode(true);
-    similarProduct.querySelector("[data-skafos-product-id]").dataset.skafosProductId=item.id.split('/').pop();
-    var links = similarProduct.querySelectorAll("[data-skafos-similar-link]");
-    links.forEach((link) => {
-      link.href = item.pdp_url;
-    });
-    var titles = similarProduct.querySelectorAll("[data-skafos-similar-title]");
-    titles.forEach((title) => {
-      title.innerHTML = item.name;
-    });
-    var images = similarProduct.querySelectorAll("[data-skafos-similar-image]");
-    images.forEach((image) => {
-      image.src = item.image_url;
-      image.srcset = item.image_url;
-      image.dataset.src = item.image_url;
-      image.dataset.srcset = item.image_url;
-    });
-    var prices = similarProduct.querySelectorAll("[data-skafos-similar-price]");
-    prices.forEach((price) => {
-      price.innerHTML = "$" + item.min_price;
-    });
-    similarProducts.push(similarProduct);
-  }
-  
-  for(var i=similarProducts.length-1;i>=0;i--){
-    e.parentNode.parentNode.insertBefore(similarProducts[i], e.parentNode.nextSibling);
-  }
-  
-  e.querySelector('[data-seesimilartextstarted]').innerHTML='Items Found!';
-  e.dataset.seeSimilarCompleted=true;
-  setTimeout(function (){
-   e.dataset.seeSimilarCompletedFinal=true;
-  },3000)
-
-}
+    skafosSeeSimilar('skafosSimilarProductTemplate', null, { })
 </script>
 ```
 
-The above code will fetch the data from our api and show the similar products on your collection's page. If you have complex requirements on the product item on the collection grid, like if you want to show variant swatches etc, then you need to alter the `skafosSeeSimilar` function above to modify the product template before it gets added to the `similarProducts` array. The `item` object in the above `for` loop will have the following info for you to work with: 
-```
+## Advanced Usage
+
+The `skafosSeeSimilar` function takes three parameters. 
+1. The first one is the name of the class that you used on the Collections page. 
+2. The second is a function that you can use to work with complicated themes where our default item cloning does not work.
+3. The third one is an object to pass custom options
+
+### Custom Product Card Cloning
+If you have a theme with a complex product card structure that our default code cannot handle, you can pass in a function to the second parameter of `skafosSeeSimilar`. That function has two parameters. The product HTML element that see similar was clicked on and a list of similar items. The function is expected to return a list of product HTML elements that will be inserted after the one where see similar was clicked. This is done by cloning the product HTML element and replacing all the relevant details with those of the similar product.
+
+Here is the data available for similar products to your cloning function:
+```js
 {
-description: "PRODUCT'S_DESCRIPTION"
-id: "gid://shopify/Product/<PRODUCT_ID>"
-image_filename: "<PRODUCT_IMAGE_FILE_NAME>.jpg"
-image_url: "COMPLETE_PRODUCT_IMAGE_URL"
-max_price: "MAX_PRODUCT_PRICE"
-metadata: {image_text: null, image_id: "gid://shopify/ProductImage/<IMAGE_ID>", product_type: "PRODUCT_TYPE", total_variants: 1, has_only_default_variant: true, …}
-min_price: "MIN_PRODUCT_PRICE"
-name: "PRODUCT_NAME"
-pdp_url: "PRODUCT_PAGE_URL"
-solution_version: "SKAFOS_SOLUTION_VERSION"
-tags: (7) [ARRAY_OF_PRODUCT_TAGS]
+    description: "PRODUCT'S_DESCRIPTION"
+    id: "gid://shopify/Product/<PRODUCT_ID>"
+    image_filename: "<PRODUCT_IMAGE_FILE_NAME>.jpg"
+    image_url: "COMPLETE_PRODUCT_IMAGE_URL"
+    max_price: "MAX_PRODUCT_PRICE"
+    metadata: {
+        image_text: null, 
+        image_id: "gid://shopify/ProductImage/<IMAGE_ID>", 
+        product_type: "PRODUCT_TYPE", 
+        total_variants: 1, 
+        has_only_default_variant: true, 
+        …
+    }
+    min_price: "MIN_PRODUCT_PRICE"
+    name: "PRODUCT_NAME"
+    pdp_url: "PRODUCT_PAGE_URL"
+    solution_version: "SKAFOS_SOLUTION_VERSION"
+    tags: [ARRAY_OF_PRODUCT_TAGS]
 }
 ```
-You can use the above object to modify the contents of the template before it gets added to the `similarProducts` array, which is used to add similar products to the collection's products grid. 
+
+Here is an example function and how to use it:
+```html
+<script type="module">
+    window.skafosShopId={{shop.id}}
+    import { skafosSeeSimilar } from 'http://hosted.skafos.ai/assets/scripts/skafos-see-similar.js'
+
+    const productClone = (productDiv, newProducts) => {
+        const similarProducts = []
+
+        for (const product of newProducts) {
+            const similarProduct = productDiv.cloneNode(true)
+            similarProduct.setAttribute('data-skafos-product-id', product.id.split('/').pop())
+
+            // update links
+            const links = similarProduct.querySelectorAll("[data-skafos-similar-link]")
+            links.forEach((link) => {
+                link.href = product.pdp_url
+            })
+
+            // update titles
+            const titles = similarProduct.querySelectorAll("[data-skafos-similar-title]")
+            titles.forEach((title) => {
+                title.innerHTML = product.name
+            })
+
+            // update images
+            const images = similarProduct.querySelectorAll("[data-skafos-similar-image]")
+            images.forEach((image) => {
+                image.src = product.image_url
+                image.srcset = product.image_url
+                image.dataset.src = product.image_url
+                image.dataset.srcset = product.image_url
+            })
+
+            // update prices
+            const prices = similarProduct.querySelectorAll("[data-skafos-similar-price]")
+            prices.forEach((price) => {
+                price.innerHTML = "$" + product.min_price
+            })
+            similarProducts.push(similarProduct)
+        }
+
+        return similarProducts
+    }
+
+    skafosSeeSimilar('skafosSimilarProductTemplate', productClone, { })
+</script>
+```
+
+### Options
+
+The third parameter of `skafosSeeSimilar` takes several options:
+
+**text**
+
+You can use this property to replace the text that is shown on the See Similar widget. This is an object with three properties
+1. seeSimilar - The default value for this is `See Similar`
+2. findingItems - The default value for this is `Finding Items ...`
+3. foundItems - The default value for this is `Items Found!`
+
+**count**
+
+This is the number of similar items that are inserted. The default is 5.
+
+**stylesheet**
+
+[Here is our default stylesheet](assets/styles/skafos-see-similar.css). You can use this to create your own stylesheet and then provide the url to that stylesheet to use instead of ours.
+
+Here is an example of using some options:
+```js
+skafosSeeSimilar('skafosSimilarProductTemplate', productClone, {
+    text: {
+        seeSimilar: 'More Like This'
+    },
+    count: 3,
+    stylesheet: 'https://url.to/mystyles.css'
+ })
+```
