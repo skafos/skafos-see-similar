@@ -8,13 +8,14 @@ Go to Online Store -> Themes -> the theme you want to edit -> Actions -> Edit Co
 Find the liquid file that populates products in your collections and add the following items to the product item template within the collection products list. 
 
 1. A Custom class - `skafosSimilarProductTemplate`
-2. The Product id
-3. The Collection id
+2. The Product id - `data-skafos-product-id="{{product.id}}"`
+3. The Collection id - `data-skafos-collection-id="{{collection.id}}"`
+4. Number of products in the collection - `data-skafos-product-count="{{collection.products_count}}"`
 
 This code could look something like this:
 ```
           {%- for product in collection.products -%}
-            <li class="grid__item skafosSimilarProductTemplate" data-skafos-product-id="{{product.id}}" data-skafos-collection-id="{{collection.id}}">
+            <li class="grid__item skafosSimilarProductTemplate" data-skafos-product-id="{{product.id}}" data-skafos-collection-id="{{collection.id}}" data-skafos-product-count="{{collection.products_count}}">
               {% render 'product-card',
                 product_card_product: product,
                 media_size: section.settings.image_ratio,
@@ -29,6 +30,7 @@ This code could look something like this:
 ### Product Card
 
 Add the following data attributes to all the dynamic HTML elements within the skafosSimilarProductTemplate that render title, images, and price:
+  - `data-skafos-similar-link` : Product Link
   - `data-skafos-similar-title` : Title
   - `data-skafos-similar-image` : Image 
   - `data-skafos-similar-price` : Price
